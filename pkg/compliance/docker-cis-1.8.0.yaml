@@ -1,0 +1,77 @@
+---
+spec:
+  id: docker-cis-1.8.0
+  title: CIS Docker Community Edition Benchmark v1.8.0
+  description: CIS Docker Community Edition Benchmark
+  relatedResources : 
+    - https://www.cisecurity.org/benchmark/docker
+  version: "1.8.0"
+  platform: docker
+  type: cis
+  controls:
+    - id: '4.1'
+      name: Ensure that a user for the container has been created
+      description: 'Containers should run as a non-root user.'
+      checks:
+        - id: DS-0002
+      severity: 'HIGH'
+    - id: '4.2'
+      name: Ensure that containers use only trusted base images (Manual)
+      description: 'You should ensure that container images you use are either written from scratch or are based on another established and trusted base image downloaded over a secure channel.'
+      checks:
+      severity: 'HIGH'
+    - id: '4.3'
+      name: Ensure that unnecessary packages are not installed in the container (Manual)
+      description: 'Containers should have as small a footprint as possible, and should not contain unnecessary software packages which could increase their attack surface.'
+      checks:
+      severity: 'HIGH'
+    - id: '4.4'
+      name: Ensure images are scanned and rebuilt to include security patches
+      description: 'Images should be scanned frequently for any vulnerabilities. You should rebuild all images to include these patches and then instantiate new containers from them.'
+      checks:
+        - id: VULN-CRITICAL # special ID for filtering vulnerabilities
+      severity: 'CRITICAL'
+    - id: '4.5'
+      name: Ensure Content trust for Docker is Enabled (Manual)
+      description: 'Content trust is disabled by default and should be enabled in line with organizational security policy.'
+      checks:
+      severity: 'LOW'
+    - id: '4.6'
+      name: Ensure that HEALTHCHECK instructions have been added to container images
+      description: 'You should add the HEALTHCHECK instruction to your Docker container images in order to ensure that health checks are executed against running containers.'
+      checks:
+        - id: DS-0026
+      severity: 'LOW'
+    - id: '4.7'
+      name: Ensure update instructions are not used alone in Dockerfiles
+      description: 'You should not use OS package manager update instructions such as apt-get update or yum update either alone or in a single line in any Dockerfiles used to generate images under review.'
+      checks:
+        - id: DS-0017
+      severity: 'HIGH'
+    - id: '4.8'
+      name: Ensure setuid and setgid permissions are removed (Manual)
+      description: 'Removing setuid and setgid permissions in the images can prevent privilege escalation attacks within containers.'
+      checks:
+      severity: 'HIGH'
+    - id: '4.9'
+      name: Ensure that COPY is used instead of ADD in Dockerfiles
+      description: 'You should use the COPY instruction instead of the ADD instruction in the Dockerfile.'
+      checks:
+        - id: DS-0005
+      severity: 'LOW'
+    - id: '4.10'
+      name: Ensure secrets are not stored in Dockerfiles
+      description: 'Do not store any secrets in Dockerfiles.'
+      checks:
+        - id: SECRET-CRITICAL # special ID for filtering secrets
+      severity: 'CRITICAL'
+    - id: '4.11'
+      name: Ensure only verified packages are installed (Manual)
+      description: 'You should verify the authenticity of packages before installing them into images.'
+      checks: # TODO
+      severity: 'MEDIUM'
+    - id: '4.12'
+      name: Ensure all signed artifacts are validated (Manual)
+      description: 'Validate artifacts signatures before uploading to the package registry.'
+      checks: # TODO
+      severity: 'MEDIUM'
