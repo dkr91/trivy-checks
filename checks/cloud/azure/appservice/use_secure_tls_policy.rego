@@ -11,6 +11,7 @@
 #   aliases:
 #     - AVD-AZU-0006
 #     - use-secure-tls-policy
+#     - azure-appservice-use-secure-tls-policy
 #   provider: azure
 #   service: appservice
 #   severity: HIGH
@@ -28,16 +29,19 @@ import rego.v1
 
 import data.lib.cloud.metadata
 
-recommended_tls_version := "1.2"
+tls12 := "1.2"
+tls13 := "1.3"
+
+secure_tls_versions := {tls12, tls13}
 
 deny contains res if {
 	some service in input.azure.appservice.services
 	isManaged(service)
-	not is_recommended_tls_version(service)
+	not is_secure_tls_version(service)
 	res := result.new(
 		"App service does not require a secure TLS version.",
 		metadata.obj_by_path(service, ["site", "minimumtlsversion"]),
 	)
 }
 
-is_recommended_tls_version(service) := service.site.minimumtlsversion.value == recommended_tls_version
+is_secure_tls_version(service) := service.site.minimumtlsversion.value in secure_tls_versions

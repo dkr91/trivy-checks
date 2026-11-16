@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/docker/docker/api/types/container"
-	"github.com/docker/docker/api/types/mount"
+	"github.com/moby/moby/api/types/container"
+	"github.com/moby/moby/api/types/mount"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -19,6 +19,8 @@ import (
 )
 
 func TestCustomChecks(t *testing.T) {
+	examplesPath, err := filepath.Abs("../examples")
+	require.NoError(t, err)
 
 	tests := []struct {
 		dir        string
@@ -99,12 +101,11 @@ func TestCustomChecks(t *testing.T) {
 				"--check-namespaces", "user",
 				"--skip-check-update",
 				"--ignore-policy", "../ignore.rego",
+				// fail on any compile error instead of dropping the checks that fail
+				"--rego-error-limit", "0",
 			}
 
 			args = append(args, tt.args...)
-
-			examplesPath, err := filepath.Abs("../examples")
-			require.NoError(t, err)
 
 			reportPath := filepath.Join(examplesPath, tt.dir, outputFile)
 
@@ -154,7 +155,7 @@ func TestCustomChecks(t *testing.T) {
 			}
 
 			require.Len(t, fails, 1)
-			assert.Equal(t, expected, lo.Values(fails)[0])
+			assert.Equal(t, expected, fails[results[0].Target])
 		})
 	}
 }

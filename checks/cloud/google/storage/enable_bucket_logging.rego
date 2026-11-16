@@ -14,6 +14,7 @@
 #     - AVD-GCP-0077
 #     - enable-bucket-logging
 #     - storage-bucket-logging-not-enabled
+#     - google-storage-enable-bucket-logging
 #   provider: google
 #   service: storage
 #   severity: MEDIUM
@@ -35,11 +36,13 @@ import data.lib.cloud.metadata
 
 buckets_for_logging := {name |
 	some bucket in input.google.storage.buckets
+	isManaged(bucket)
 	name := bucket.logging.logbucket.value
 }
 
 deny contains res if {
 	some bucket in input.google.storage.buckets
+	isManaged(bucket)
 	not bucket.name.value in buckets_for_logging
 	not has_logging(bucket)
 

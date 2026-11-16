@@ -11,6 +11,7 @@
 #   aliases:
 #     - AVD-AZU-0026
 #     - secure-tls-policy
+#     - azure-database-secure-tls-policy
 #   provider: azure
 #   service: database
 #   severity: MEDIUM
@@ -29,9 +30,9 @@ import rego.v1
 import data.lib.azure.database
 import data.lib.cloud.metadata
 
-recommended_tls_version := "TLS1_2"
+recommended_tls_versions := {"TLS1_2", "TLS1_3"}
 
-recommended_mssql_tls_version := "1.2"
+recommended_mssql_tls_versions := {"1.2", "1.3"}
 
 deny contains res if {
 	some server in database.servers(["mysqlservers", "postgresqlservers"])
@@ -51,6 +52,6 @@ deny contains res if {
 	)
 }
 
-is_recommended_tls(server) := server.minimumtlsversion.value == recommended_tls_version
+is_recommended_tls(server) if server.minimumtlsversion.value in recommended_tls_versions
 
-is_recommended_mssql_tls(server) := server.minimumtlsversion.value == recommended_mssql_tls_version
+is_recommended_mssql_tls(server) if server.minimumtlsversion.value in recommended_mssql_tls_versions

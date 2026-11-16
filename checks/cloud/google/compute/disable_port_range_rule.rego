@@ -13,6 +13,7 @@
 #   aliases:
 #     - AVD-GCP-0074
 #     - disable-port-range-rule
+#     - google-compute-disable-port-range-rule
 #     - compute-network-using-firewall-rule-that-allows-large-port-range
 #   provider: google
 #   service: compute
@@ -34,6 +35,7 @@ import data.gcp0074.max_port_range_size as custom_max_range
 
 # Maximum allowed port range size - ports above this threshold will be flagged
 default_max_port_range_size := 30
+
 max_port_range_size := custom_max_range if {
 	custom_max_range >= 0
 } else := default_max_port_range_size

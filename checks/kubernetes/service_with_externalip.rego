@@ -10,6 +10,7 @@
 #   aliases:
 #     - AVD-KSV-0108
 #     - no_svc_with_extip
+#     - kubernetes-no-svc-with-extip
 #   severity: HIGH
 #   recommended_action: "Do not set spec.externalIPs"
 #   input:
@@ -38,7 +39,8 @@ failExtIpsOrName if {
 # failExtIpsOrName is true if service has external Name
 failExtIpsOrName if {
 	kubernetes.kind == "Service"
-	not allowedNames[kubernetes.object.spec.externalName]
+	name := kubernetes.object.spec.externalName
+	count({name} & allowedNames) == 0
 }
 
 deny contains res if {

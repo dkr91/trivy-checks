@@ -19,9 +19,11 @@
 #   aliases:
 #     - AVD-GCP-0048
 #     - metadata-endpoints-disabled
+#     - google-gke-metadata-endpoints-disabled
 #   provider: google
 #   service: gke
 #   severity: HIGH
+#   deprecated: true
 #   recommended_action: Disable legacy metadata endpoints
 #   input:
 #     selector:

@@ -14,6 +14,7 @@
 #     - AVD-GCP-0078
 #     - enable-bucket-versioning
 #     - storage-bucket-versioning-disabled
+#     - google-storage-enable-bucket-versioning
 #   provider: google
 #   service: storage
 #   severity: MEDIUM
@@ -35,6 +36,7 @@ import data.lib.cloud.metadata
 
 deny contains res if {
 	some bucket in input.google.storage.buckets
+	isManaged(bucket)
 	not bucket.versioning.enabled.value
 
 	res := result.new(

@@ -13,6 +13,7 @@
 #     - AVD-DS-0014
 #     - DS014
 #     - standardise-remote-get
+#     - docker-standardise-remote-get
 #   severity: LOW
 #   recommended_action: "Pick one util, either 'wget' or 'curl'"
 #   input:
@@ -26,8 +27,9 @@ import rego.v1
 import data.lib.docker
 
 deny contains res if {
-	wget := get_tool_usage(docker.run[_], "wget")
-	curl := get_tool_usage(docker.run[_], "curl")
+	some _, runs in docker.stage_instructions("run")
+	wget := get_tool_usage(runs[_], "wget")
+	curl := get_tool_usage(runs[_], "curl")
 
 	count(wget) > 0
 	count(curl) > 0
@@ -45,7 +47,7 @@ get_tool_usage(cmd, cmd_name) := r if {
 
 	commands_list = regex.split(`\s*&&\s*`, cmd.Value[0])
 
-	reg_exp = sprintf("^( )*%s", [cmd_name])
+	reg_exp = sprintf(`^\s*%s`, [cmd_name])
 
 	r := [x |
 		instruction := commands_list[_]
