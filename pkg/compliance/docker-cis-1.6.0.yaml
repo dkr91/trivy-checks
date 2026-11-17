@@ -49,9 +49,10 @@ spec:
         - id: DS-0017
       severity: 'HIGH'
     - id: '4.8'
-      name: Ensure setuid and setgid permissions are removed in the images (Manual)
+      name: Ensure setuid and setgid permissions are removed in the images
       description: 'Removing setuid and setgid permissions in the images would prevent privilege escalation attacks in the containers.'
       checks:
+        - id: DS-0032 # implemented in Trivy, checks the file modes of the image filesystem
       severity: 'HIGH'
     - id: '4.9'
       name: Ensure COPY is used instead of ADD
