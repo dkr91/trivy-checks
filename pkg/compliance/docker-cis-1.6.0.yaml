@@ -67,9 +67,10 @@ spec:
         - id: SECRET-CRITICAL # special ID for filtering secrets
       severity: 'CRITICAL'
     - id: '4.11'
-      name: Ensure only verified packages are installed (Manual)
+      name: Ensure only verified packages are installed
       description: 'Verify the authenticity of packages before installing them into images.'
-      checks: # TODO
+      checks:
+        - id: DS-0033
       severity: 'MEDIUM'
     - id: '4.12'
       name: Ensure all signed artifacts are validated (Manual)

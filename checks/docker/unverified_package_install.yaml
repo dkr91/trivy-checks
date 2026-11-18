@@ -1,0 +1,23 @@
+dockerfile:
+  good:
+    - |-
+      FROM debian:12
+      RUN apt-get update && apt-get install -y --no-install-recommends curl
+      USER mike
+    - |-
+      FROM fedora:41
+      RUN rpm --import https://example.com/RPM-GPG-KEY && dnf install -y example
+      USER mike
+  bad:
+    - |-
+      FROM debian:12
+      RUN apt-get update && apt-get install -y --allow-unauthenticated curl
+      USER mike
+    - |-
+      FROM alpine:3.20
+      RUN apk add --allow-untrusted /tmp/example.apk
+      USER mike
+    - |-
+      FROM fedora:41
+      RUN dnf install -y --nogpgcheck example
+      USER mike
